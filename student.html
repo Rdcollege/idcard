@@ -1,121 +1,171 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Student ID Card</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f0f0f0;
-      padding: 40px;
-      display: flex;
-      justify-content: center;
+      margin: 0;
+      background: #f5f5f5;
     }
+
     .id-card {
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #aaa;
-      width: 400px;
+      background: url('bg.jpg') no-repeat center;
+      background-size: cover;
+      width: 700px;
+      height: 1024px;
+      margin: 30px auto;
+      padding: 40px 30px;
+      position: relative;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      box-sizing: border-box;
+      background-color: white;
     }
-    .header {
+
+    .college-name {
+      text-align: center;
+      color: #d76a00;
+      font-weight: bold;
+      font-size: 24px;
+    }
+
+    .sub-header {
+      text-align: center;
+      color: #2b2b2b;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .photo {
+      width: 160px;
+      height: 200px;
+      border: 3px solid orange;
+      margin: 10px auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    .session {
       text-align: center;
       font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .student-name {
+      text-align: center;
+      font-size: 22px;
+      color: #0044cc;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .details {
       font-size: 18px;
-      margin-bottom: 20px;
-      text-transform: uppercase;
+      padding: 10px 30px;
+      line-height: 1.7;
     }
-    .photo {
-      display: block;
-      margin: 10px auto;
-      width: 120px;
-      height: 140px;
-      object-fit: cover;
-      border: 2px solid #333;
-    }
-    .info {
-      font-size: 15px;
-      margin: 8px 0;
-    }
+
     .label {
       font-weight: bold;
+      width: 160px;
+      display: inline-block;
+    }
+
+    .signature {
+      position: absolute;
+      bottom: 30px;
+      right: 40px;
+      font-family: cursive;
+      text-align: center;
+      color: #004400;
+    }
+
+    .error {
+      text-align: center;
+      margin-top: 100px;
+      font-size: 20px;
+      color: red;
     }
   </style>
 </head>
 <body>
   <div class="id-card" id="card">
-    <div class="header">Govt. Rani Durgawati College Wadrafnagar<br>Dist Balrampur (C.G.)</div>
-    <img id="photo" class="photo" src="" alt="Student Photo" />
-    <div class="info"><span class="label">Name:</span> <span id="name"></span></div>
-    <div class="info"><span class="label">Father's Name:</span> <span id="fname"></span></div>
-    <div class="info"><span class="label">Mother's Name:</span> <span id="mname"></span></div>
-    <div class="info"><span class="label">DOB:</span> <span id="dob"></span></div>
-    <div class="info"><span class="label">Class:</span> <span id="class"></span></div>
-    <div class="info"><span class="label">Subjects:</span> <span id="subjects"></span></div>
-    <div class="info"><span class="label">Admission No:</span> <span id="admno"></span></div>
-    <div class="info"><span class="label">Admission Date:</span> <span id="admdt"></span></div>
-    <div class="info"><span class="label">Mobile:</span> <span id="mobile"></span></div>
-    <div class="info"><span class="label">Address:</span> <span id="address"></span></div>
-    <div class="info"><span class="label">District:</span> <span id="district"></span></div>
-    <div class="info"><span class="label">Status:</span> <span id="status"></span></div>
+    <div class="college-name">GOVT. RANI DURGAWATI COLLEGE</div>
+    <div class="sub-header">WADRAFNAGAR, BALRAMPUR (C.G.)</div>
+    <img id="student-photo" class="photo" src="" alt="Student Photo">
+    <div class="session">SESSION 2024–25</div>
+    <div class="student-name" id="student-name"></div>
+    <div class="details">
+      <div><span class="label">Father's Name:</span> <span id="fname"></span></div>
+      <div><span class="label">Date of Birth:</span> <span id="dob"></span></div>
+      <div><span class="label">Admission No.:</span> <span id="admno"></span></div>
+      <div><span class="label">Admission Date:</span> <span id="admdt"></span></div>
+      <div><span class="label">Address:</span> <span id="address"></span></div>
+      <div><span class="label">Dist.:</span> <span id="district"></span></div>
+      <div><span class="label">Mobile No.:</span> <span id="mobile"></span></div>
+      <div><span class="label">Class:</span> <span id="class"></span></div>
+      <div><span class="label">Subjects:</span> <span id="subjects"></span></div>
+    </div>
+    <div class="signature">
+      <strong>Principal</strong><br>
+      Govt. Degree College<br>
+      Wadrafnagar, Balrampur (C.G.)
+    </div>
   </div>
-<script>
-  const sheetId = "1Ona1thP9bqtVGF4k7F8VGR5RGUKD9L01p-o68k5ziEk";
-const apiKey = "AIzaSyDFy7OEmx1dj4z2RzPhGA3_b4TNPgcIzEY";
-const sheetName = "IDCARD"; // 🔁 CHANGE THIS IF YOUR SHEET TAB HAS A DIFFERENT NAME
 
-const params = new URLSearchParams(window.location.search);
-const userId = params.get("id");
+  <div class="error" id="error" style="display:none;">Error fetching data. Please check the URL.</div>
 
-if (!userId) {
-  document.getElementById("card").innerHTML = "<p>User ID not provided in URL.</p>";
-} else {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?key=${apiKey}`;
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('id');
+    const sheetId = '1Ona1thP9bqtVGF4k7F8VGR5RGUKD9l01p-o68k5ziEk';
+    const apiKey = 'AIzaSyDFy7OEmx1dj4z2RzPhGA3_b4TNPgcIzEY'; // 👈 Replace with your real API key
+    const sheetName = 'IDCARD'; // 👈 Replace with your actual sheet name if different
+    const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?key=${apiKey}`;
 
-  fetch(url)
-    .then(res => {
-      if (!res.ok) throw new Error(`HTTP ${res.status} - ${res.statusText}`);
-      return res.json();
-    })
-    .then(data => {
-      if (!data.values || data.values.length < 2) {
-        throw new Error("Sheet returned no usable data");
-      }
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        const headers = data.values[0];
+        const rows = data.values.slice(1);
+        const userIndex = headers.indexOf("USER_ID");
+        const match = rows.find(row => row[userIndex] === userId);
 
-      const rows = data.values;
-      const headers = rows[0];
-      const userIndex = headers.indexOf("USER_ID");
+        if (!match) {
+          document.getElementById("card").style.display = "none";
+          document.getElementById("error").style.display = "block";
+          return;
+        }
 
-      const student = rows.find(row => row[userIndex] === userId);
+        const record = {};
+        headers.forEach((h, i) => {
+          record[h] = match[i];
+        });
 
-      if (!student) {
-        document.getElementById("card").innerHTML = "<p>Student not found.</p>";
-        return;
-      }
+        document.getElementById("student-name").innerText = record.NAME || "";
+        document.getElementById("fname").innerText = record.FNAME || "";
+        document.getElementById("dob").innerText = record.DOB || "";
+        document.getElementById("admno").innerText = record.ADMNO || "";
+        document.getElementById("admdt").innerText = record.ADMDATE || "";
+        document.getElementById("address").innerText = record.ADDRESS || "";
+        document.getElementById("district").innerText = record.DISTRICT || "";
+        document.getElementById("mobile").innerText = record.MOBILE || "";
+        document.getElementById("class").innerText = record.CLASS || "";
+        document.getElementById("subjects").innerText = record.SUBJECTS || "";
 
-      const get = (field) => student[headers.indexOf(field)] || "";
+        // Load photo
+        const photo = get("PHOTO");
+    
+        const photoPath = `https://raw.githubusercontent.com/rdcollege/idcard/main/photos/${photo}`;
+        document.getElementById("student-photo").src = photoPath;
 
-      document.getElementById("name").textContent = get("NAME");
-      document.getElementById("fname").textContent = get("FNAME");
-      document.getElementById("mname").textContent = get("MNAME");
-      document.getElementById("dob").textContent = get("DOB");
-      document.getElementById("class").textContent = get("CLASS");
-      document.getElementById("subjects").textContent = get("SUBJECTS");
-      document.getElementById("admno").textContent = get("ADMNO");
-      document.getElementById("admdt").textContent = get("ADMDATE");
-      document.getElementById("mobile").textContent = get("MOBILE");
-      document.getElementById("address").textContent = get("ADDRESS");
-      document.getElementById("district").textContent = get("DISTRICT");
-      document.getElementById("status").textContent = get("STATUS");
-
-      const photo = get("PHOTO");
-      document.getElementById("photo").src = `https://raw.githubusercontent.com/rdcollege/idcard/main/photo/${photo}`;
-    })
-    .catch(error => {
-      console.error("Error fetching data:", error);
-      document.getElementById("card").innerHTML = `<p>Error fetching data: ${error.message}</p>`;
-    });
-}
-</script>
+      })
+      .catch(error => {
+        document.getElementById("card").style.display = "none";
+        document.getElementById("error").style.display = "block";
+        console.error(error);
+      });
+  </script>
 </body>
 </html>
