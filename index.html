@@ -1,3 +1,46 @@
+<!DOCTYPE html>
 <html>
-  <P>welcome</P>
+<head>
+  <title>ID Card Verification</title>
+</head>
+<body>
+  <h2>Enter USER_ID to Verify</h2>
+  <input type="text" id="searchInput" placeholder="Enter USER_ID">
+  <button onclick="searchData()">Search</button>
+
+  <div id="result"></div>
+
+  <script>
+    const apiKey = 'AIzaSyDFy7OEmx1dj4z2RzPhGA3_b4TNPgcIzEY';
+    const sheetId = '1ZSBx_rw5IVOUCbN5WzmA1My5wiOPGfJVjk1L7Z6_4Hc';
+    const sheetName = 'Sheet1';
+
+    async function fetchSheetData() {
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?key=${apiKey}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      return data.values;
+    }
+
+    async function searchData() {
+      const input = document.getElementById("searchInput").value.trim();
+      const resultDiv = document.getElementById("result");
+      const rows = await fetchSheetData();
+
+      const headers = rows[0];
+      const matched = rows.find(row => row[0] === input); // USER_ID is column 0
+
+      if (matched) {
+        resultDiv.innerHTML = `
+          <h3>ID Found:</h3>
+          <table border="1">
+            ${headers.map((h, i) => `<tr><td><b>${h}</b></td><td>${matched[i]}</td></tr>`).join("")}
+          </table>
+        `;
+      } else {
+        resultDiv.innerHTML = `<p style="color:red;">USER_ID not found</p>`;
+      }
+    }
+  </script>
+</body>
 </html>
