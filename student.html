@@ -75,24 +75,37 @@
       letter-spacing: 0.5px;
     }
 
-    .photo-section {
+   .photo-session-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   padding: 10px 16px 0;
+  gap: 10px;
 }
 
-.photo-section img {
-  margin: 0 auto;
-  display: block;
+.photo-box {
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
 
-    .session-box {
-      font-size: 14px;
-      font-weight: bold;
-      color: #0d47a1;
-      text-align: right;
-    }
+.photo-box img {
+  width: 95px;
+  height: 110px;
+  border: 2px solid #0d47a1;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.session-box {
+  text-align: right;
+  font-size: 14px;
+  font-weight: bold;
+  color: #0d47a1;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
 
     .details {
       padding: 10px 16px;
@@ -201,10 +214,18 @@
                 <h2>Govt. Rani Durgawati College<br>Wadrafnagar, Dist. Balrampur (C.G.)</h2>
               </div>
               <div class="title-bar">STUDENT ID CARD</div>
-              <div class="photo-section">
-                <img src="https://raw.githubusercontent.com/rdcollege/idcard/main/photo/${photo}" alt="Student Photo" />
-                <div class="session-box">Session<br>2025-26</div>
-              </div>
+              
+              
+              
+             <div class="photo-session-wrapper">
+  <div class="photo-box">
+    <img src="..." alt="Student Photo" />
+  </div>
+  <div class="session-box">
+    Session<br>2025-26
+  </div>
+</div>
+
               <div class="details">
                 <table>
                   <tr><td class="label">Name</td><td class="colon">:</td><td class="value">${get("NAME")}</td></tr>
