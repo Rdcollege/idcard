@@ -145,6 +145,16 @@
       font-weight: bold;
     }
 
+    td.status.green {
+  color: green;
+  font-weight: bold;
+}
+
+td.status.red {
+  color: red;
+  font-weight: bold;
+}
+
     .footer {
       background: #e3f2fd;
       text-align: center;
@@ -279,7 +289,16 @@ if (!userId) {
       document.getElementById("district").textContent = get("DISTRICT");
        document.getElementById("bg").textContent = get("BG");
       document.getElementById("status").textContent = get("STATUS");
+const statusText = get("STATUS").trim().toLowerCase();
+const statusElement = document.getElementById("status");
 
+statusElement.textContent = get("STATUS");
+
+if (statusText === "active") {
+  statusElement.parentElement.classList.add("green");
+} else {
+  statusElement.parentElement.classList.add("red");
+}
       const photo = get("PHOTO");
       document.getElementById("photo").src = `https://raw.githubusercontent.com/rdcollege/idcard/main/photo/${photo}`;
     })
