@@ -1,65 +1,236 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
   <meta charset="UTF-8" />
-  <title>Student ID Card</title>
+  <title>ID Card – Govt. Rani Durgawati College Wadrafnagar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f0f0f0;
-      padding: 40px;
+      background: #e0e0e0;
       display: flex;
       justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
+
     .id-card {
+      width: 360px;
       background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #aaa;
-      width: 400px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 2px solid #0d47a1;
+      position: relative;
     }
+
+    .id-card::before {
+      content: "WEB COPY";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 40px;
+      color: rgba(0, 0, 0, 0.06);
+      font-weight: bold;
+      z-index: 0;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
     .header {
-      text-align: center;
-      font-weight: bold;
-      font-size: 18px;
-      margin-bottom: 20px;
-      text-transform: uppercase;
+      background-color: #0d47a1;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      z-index: 1;
     }
-    .photo {
-      display: block;
-      margin: 10px auto;
-      width: 120px;
-      height: 140px;
+
+    .header img.logo {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
       object-fit: cover;
-      border: 2px solid #333;
+      border: 2px solid white;
+      margin-right: 12px;
     }
-    .info {
+
+    .header h2 {
       font-size: 15px;
-      margin: 8px 0;
+      line-height: 1.4;
     }
-    .label {
+
+    .title-bar {
+      background: #1976d2;
+      color: white;
+      font-size: 15px;
+      text-align: center;
+      padding: 6px 0;
       font-weight: bold;
+      letter-spacing: 0.5px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .session-box {
+      text-align: right;
+      padding: 10px 20px 0 0;
+      font-size: 18px;
+      font-weight: bold;
+      color: #0d47a1;
+      line-height: 1.2;
+    }
+
+    .photo-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: -35px 0px 0px; /* पहले था: 10px 0 6px */
+  position: relative;
+  z-index: 1;
+}
+
+    .photo-section img {
+      width: 95px;
+      height: 110px;
+      border: 2px solid #0d47a1;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .details {
+      flex: 1;
+      padding: 8px 18px;
+      font-size: 14px;
+      z-index: 1;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    td {
+      padding: 4px 6px;
+      vertical-align: top;
+    }
+
+    td.label {
+      font-weight: bold;
+      color: #0d47a1;
+      width: 38%;
+    }
+
+    td.colon {
+      width: 4%;
+      font-weight: bold;
+      color: #0d47a1;
+    }
+
+    td.value {
+      width: 58%;
+    }
+
+    td.status {
+      color: green;
+      font-weight: bold;
+    }
+
+    .footer {
+      background: #e3f2fd;
+      text-align: center;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #0d47a1;
+      border-top: 1px solid #90caf9;
+      z-index: 1;
+    }
+.credit {
+  font-size: 10px;
+  color: #888;
+  text-align: center;
+  padding: 4px 6px;
+  border-top: 1px solid #ddd;
+  background: #f9f9f9;
+}
+    @media print {
+      body {
+        background: white;
+      }
+
+      .id-card {
+        box-shadow: none;
+        margin: 0 auto;
+      }
+
+      .id-card::before {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="id-card" id="card">
-    <div class="header">Govt. Rani Durgawati College Wadrafnagar<br>Dist Balrampur (C.G.)</div>
-    <img id="photo" class="photo" src="" alt="Student Photo" />
-    <div class="info"><span class="label">Name:</span> <span id="name"></span></div>
-    <div class="info"><span class="label">Father's Name:</span> <span id="fname"></span></div>
-    <div class="info"><span class="label">Mother's Name:</span> <span id="mname"></span></div>
-    <div class="info"><span class="label">DOB:</span> <span id="dob"></span></div>
-    <div class="info"><span class="label">Class:</span> <span id="class"></span></div>
-    <div class="info"><span class="label">Subjects:</span> <span id="subjects"></span></div>
-    <div class="info"><span class="label">Admission No:</span> <span id="admno"></span></div>
-    <div class="info"><span class="label">Admission Date:</span> <span id="admdt"></span></div>
-    <div class="info"><span class="label">Mobile:</span> <span id="mobile"></span></div>
-    <div class="info"><span class="label">Address:</span> <span id="address"></span></div>
-    <div class="info"><span class="label">District:</span> <span id="district"></span></div>
-    <div class="info"><span class="label">Status:</span> <span id="status"></span></div>
+  <div class="id-card">
+    <!-- Header -->
+    <div class="header">
+      <img src="logo.png" alt="College Logo" class="logo">
+      <h2>
+        Govt. Rani Durgawati College<br>
+        Wadrafnagar, Dist. Balrampur (C.G.)
+      </h2>
+    </div>
+
+    <!-- Title -->
+    <div class="title-bar">STUDENT ID CARD</div>
+
+    <!-- Session aligned to right -->
+    <div class="session-box">
+      Session<br>2025-26
+    </div>
+ 
+    <!-- Photo -->
+    <div class="photo-section">
+      <img id="photo" class="photo" src="" alt="Student Photo" />
+    </div>
+
+    <!-- Student Details -->
+    <div class="details">
+      <table>
+        <tr><td class="label">Name</td><td class="colon">:</td><td class="value"><span id="name"></span></td></tr>
+        <tr><td class="label">Father's Name</td><td class="colon">:</td><td class="value"><span id="fname"></span></td></tr>
+        <tr><td class="label">Mother's Name</td><td class="colon">:</td><td class="value"><span id="mname"></span></td></tr>
+        <tr><td class="label">DOB</td><td class="colon">:</td><td class="value"><span id="dob"></span></td></tr>
+        <tr><td class="label">Class</td><td class="colon">:</td><td class="value"><span id="class"></span></td></tr>
+        <tr><td class="label">Subject</td><td class="colon">:</td><td class="value"><span id="subjects"></span></td></tr>
+        <tr><td class="label">Admission No.</td><td class="colon">:</td><td class="value"><span id="admno"></span></td></tr>
+        <tr><td class="label">Admission Date</td><td class="colon">:</td><td class="value"><span id="admdt"></span></td></tr>
+        <tr><td class="label">Blood Group</td><td class="colon">:</td><td class="value"><span id="bg"></span></td></tr>
+        <tr><td class="label">Address</td><td class="colon">:</td><td class="value"><span id="address"></td></tr>
+        <tr><td class="label">District</td><td class="colon">:</td><td class="value"><span id="district"></td></tr>
+        <tr><td class="label">Mobile No.</td><td class="colon">:</td><td class="value"><span id="mobile"></span></td></tr>
+        <tr><td class="label">Status</td><td class="colon">:</td><td class="value status"><span id="status"></span></td></tr>
+      </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">Verified by: Govt. Rani Durgawati College</div>
+     <div class="credit">
+ Designed & Printed by: Nilesh Computer & IT Solution, Wadrafnagar | Mo. 8085070290
+
+</div>
   </div>
-<script>
+
+  <script>
   const sheetId = "1Ona1thP9bqtVGF4k7F8VGR5RGUKD9L01p-o68k5ziEk";
 const apiKey = "AIzaSyDFy7OEmx1dj4z2RzPhGA3_b4TNPgcIzEY";
 const sheetName = "IDCARD"; // 🔁 CHANGE THIS IF YOUR SHEET TAB HAS A DIFFERENT NAME
@@ -106,6 +277,7 @@ if (!userId) {
       document.getElementById("mobile").textContent = get("MOBILE");
       document.getElementById("address").textContent = get("ADDRESS");
       document.getElementById("district").textContent = get("DISTRICT");
+       document.getElementById("bg").textContent = get("BG");
       document.getElementById("status").textContent = get("STATUS");
 
       const photo = get("PHOTO");
