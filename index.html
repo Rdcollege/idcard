@@ -3,140 +3,125 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ID Card</title>
+  <title>Student ID Verification</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      padding: 20px;
-    }
-
-    .id-card {
-      width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: white;
-      border: 2px solid #000;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    }
-
-    .header {
-      text-align: center;
-      border-bottom: 2px solid #000;
-      margin-bottom: 20px;
-    }
-
-    .header h2 {
-      margin: 0;
-      font-size: 22px;
-      text-transform: uppercase;
-    }
-
-    .details {
+      background: #f4f4f4;
       display: flex;
+      justify-content: center;
+      padding: 20px;
     }
-
-    .photo {
-      flex: 0 0 120px;
+    .id-card {
+      background: #fff;
+      width: 400px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      border-radius: 10px;
       text-align: center;
-      margin-right: 20px;
     }
-
+    h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #444;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      width: 80%;
+      margin: 10px 0;
+    }
+    button {
+      padding: 10px 20px;
+      background: #0066cc;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .info {
+      text-align: left;
+      margin-top: 20px;
+    }
+    .info p {
+      margin: 5px 0;
+    }
+    .photo {
+      margin-top: 15px;
+    }
     .photo img {
       width: 120px;
       height: 140px;
-      border: 2px solid #000;
       object-fit: cover;
-    }
-
-    .info {
-      flex: 1;
-    }
-
-    .info p {
-      margin: 5px 0;
-      font-size: 14px;
-    }
-
-    .label {
-      font-weight: bold;
-    }
-
-    .footer {
-      margin-top: 20px;
-      font-size: 13px;
-      text-align: center;
+      border: 1px solid #ccc;
     }
   </style>
 </head>
 <body>
+  <div class="id-card">
+    <h2>GOVT. RANI DURGAWATI COLLEGE,<br> WADRAFNAGAR DIST BALRAMPUR C.G.</h2>
 
-<div class="id-card" id="idCard">
-  <div class="header">
-    <h2>GOVT. RANI DURGAWATI COLLEGE, WADRAFNAGAR, DIST. BALRAMPUR (C.G.)</h2>
-  </div>
-  <div class="details">
-    <div class="photo">
-      <img id="photo" src="" alt="Photo">
-    </div>
-    <div class="info" id="info">
-      <p><span class="label">Name:</span> </p>
-      <p><span class="label">Father's Name:</span> </p>
-      <p><span class="label">Mother's Name:</span> </p>
-      <p><span class="label">DOB:</span> </p>
-      <p><span class="label">Mobile:</span> </p>
-      <p><span class="label">Class:</span> </p>
-      <p><span class="label">Subjects:</span> </p>
-      <p><span class="label">Address:</span> </p>
-    </div>
-  </div>
-  <div class="footer" id="footer">
-    <p><span class="label">Admission No:</span> </p>
-    <p><span class="label">Admission Date:</span> </p>
-    <p><span class="label">Status:</span> </p>
-  </div>
-</div>
+    <input type="text" id="userId" placeholder="Enter USER_ID" />
+    <button onclick="fetchStudent()">Verify</button>
 
-<script>
-  const userId = new URLSearchParams(window.location.search).get('id');
-  const sheetId = '1Ona1thP9bqtVGF4k7F8VGR5RGUKD9L01p-o68k5ziEk';
-  const apiKey = 'AIzaSyDFy7OEmx1dj4z2RzPhGA3_b4TNPgcIzEY';
+    <div id="result" class="info"></div>
+  </div>
 
-  fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/IDCARD?key=${apiKey}`)
-    .then(res => res.json())
-    .then(data => {
-      const [headers, ...rows] = data.values;
-      const record = rows.find(row => row[0] === userId);
-      if (!record) {
-        document.getElementById('idCard').innerHTML = '<p style="text-align:center;">No data found</p>';
-        return;
+  <script>
+    const SHEET_ID = "1Ona1thP9bqtVGF4k7F8VGR5RGUKD9L01p-o68k5ziEk";
+    const API_KEY = "AIzaSyDFy7OEmx1dj4z2RzPhGA3_b4TNPgcIzEY";
+    const RANGE = "Sheet1";
+
+    async function fetchStudent() {
+      const userId = document.getElementById("userId").value.trim();
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "Loading...";
+
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        const rows = data.values;
+
+        if (!rows || rows.length < 2) {
+          resultDiv.innerHTML = "<p>No data found in sheet.</p>";
+          return;
+        }
+
+        const headers = rows[0];
+        const userIndex = headers.indexOf("USER_ID");
+
+        const userRow = rows.find((row, index) => index > 0 && row[userIndex] === userId);
+
+        if (!userRow) {
+          resultDiv.innerHTML = "<p style='color:red;'>Student not found.</p>";
+          return;
+        }
+
+        const student = {};
+        headers.forEach((h, i) => {
+          student[h] = userRow[i] || "";
+        });
+
+        const photoUrl = `https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/photos/${student.ADMNO}.jpg`;
+
+        resultDiv.innerHTML = `
+          <div class="photo"><img src="${photoUrl}" onerror="this.src='https://via.placeholder.com/120x140?text=No+Photo'" alt="Photo"></div>
+          <p><strong>Name:</strong> ${student.NAME}</p>
+          <p><strong>Father's Name:</strong> ${student.FNAME}</p>
+          <p><strong>DOB:</strong> ${student.DOB}</p>
+          <p><strong>ADMNO:</strong> ${student.ADMNO}</p>
+          <p><strong>ADMDATE:</strong> ${student.ADMDATE}</p>
+          <p><strong>MOBILE:</strong> ${student.MOBILE}</p>
+          <p><strong>ADDRESS:</strong> ${student.ADDRESS}</p>
+          <p><strong>DISTRICT:</strong> ${student.DISTRICT}</p>
+          <p><strong>STATUS:</strong> ${student.STATUS}</p>
+        `;
+      } catch (error) {
+        resultDiv.innerHTML = "<p>Error fetching data.</p>";
+        console.error(error);
       }
-
-      const info = document.getElementById('info');
-      info.innerHTML = `
-        <p><span class="label">Name:</span> ${record[1]}</p>
-        <p><span class="label">Father's Name:</span> ${record[2]}</p>
-        <p><span class="label">Mother's Name:</span> ${record[3]}</p>
-        <p><span class="label">DOB:</span> ${record[5]}</p>
-        <p><span class="label">Mobile:</span> ${record[6]}</p>
-        <p><span class="label">Class:</span> ${record[8]}</p>
-        <p><span class="label">Subjects:</span> ${record[7]}</p>
-        <p><span class="label">Address:</span> ${record[10]}, Dist. ${record[11]}</p>
-      `;
-
-      const footer = document.getElementById('footer');
-      footer.innerHTML = `
-        <p><span class="label">Admission No:</span> ${record[12]}</p>
-        <p><span class="label">Admission Date:</span> ${record[13]}</p>
-        <p><span class="label">Status:</span> ${record[4]}</p>
-      `;
-
-      // Photo
-      const photo = document.getElementById('photo');
-      photo.src = `photos/${record[12]}.jpg`;  // Using ADMNO as photo file name
-    });
-</script>
-
+    }
+  </script>
 </body>
 </html>
