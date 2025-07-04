@@ -108,8 +108,8 @@ if (!userId) {
       document.getElementById("district").textContent = get("DISTRICT");
       document.getElementById("status").textContent = get("STATUS");
 
-      const photo = get("ADMNO");
-      document.getElementById("photo").src = `https://raw.githubusercontent.com/rdcollege/idcard/main/photos/${photo}.jpg`;
+      const photo = get("PHOTO");
+      document.getElementById("photo").src = `https://raw.githubusercontent.com/rdcollege/idcard/main/photo/${photo}.jpg`;
     })
     .catch(error => {
       console.error("Error fetching data:", error);
