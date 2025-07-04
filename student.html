@@ -59,7 +59,7 @@
     <div class="info"><span class="label">District:</span> <span id="district"></span></div>
     <div class="info"><span class="label">Status:</span> <span id="status"></span></div>
   </div>
-
+<script>
   const sheetId = "1Ona1thP9bqtVGF4k7F8VGR5RGUKD9L01p-o68k5ziEk";
 const apiKey = "AIzaSyDFy7OEmx1dj4z2RzPhGA3_b4TNPgcIzEY";
 const sheetName = "Sheet1"; // 🔁 CHANGE THIS IF YOUR SHEET TAB HAS A DIFFERENT NAME
@@ -116,6 +116,6 @@ if (!userId) {
       document.getElementById("card").innerHTML = `<p>Error fetching data: ${error.message}</p>`;
     });
 }
-
+</script>
 </body>
 </html>
