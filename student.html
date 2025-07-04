@@ -109,7 +109,7 @@ if (!userId) {
       document.getElementById("status").textContent = get("STATUS");
 
       const photo = get("PHOTO");
-      document.getElementById("photo").src = `https://raw.githubusercontent.com/rdcollege/idcard/main/photo/${photo}.jpg`;
+      document.getElementById("photo").src = `https://raw.githubusercontent.com/rdcollege/idcard/main/photo/${photo}`;
     })
     .catch(error => {
       console.error("Error fetching data:", error);
