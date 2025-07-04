@@ -1,44 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>ID Card Verification</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ID Verification</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f2f2f2;
+    }
+    h1 {
+      color: #333;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+    }
+  </style>
 </head>
 <body>
-  <h2>Enter USER_ID to Verify</h2>
-  <input type="text" id="searchInput" placeholder="Enter USER_ID">
-  <button onclick="searchData()">Search</button>
-
+  <h1>Student ID Verification</h1>
+  <input type="text" id="userIdInput" placeholder="Enter USER_ID (e.g. SGG230237946)" />
+  <button onclick="fetchData()">Search</button>
   <div id="result"></div>
 
   <script>
-    const apiKey = 'AIzaSyDFy7OEmx1dj4z2RzPhGA3_b4TNPgcIzEY';
-    const sheetId = '1Ona1thP9bqtVGF4k7F8VGR5RGUKD9L01p-o68k5ziEk';
-    const sheetName = 'Sheet1';
-
-    async function fetchSheetData() {
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?key=${apiKey}`;
-      const response = await fetch(url);
-      const data = await response.json();
-      return data.values;
-    }
-
-    async function searchData() {
-      const input = document.getElementById("searchInput").value.trim();
-      const resultDiv = document.getElementById("result");
-      const rows = await fetchSheetData();
-
+    async function fetchData() {
+      const userId = document.getElementById('userIdInput').value.trim();
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/1Ona1thP9bqtVGF4k7F8VGR5RGUKD9L01p-o68k5ziEk/values/IDCARD?key=AIzaSyDFy7OEmx1dj4z2RzPhGA3_b4TNPgcIzEY`;
+      const res = await fetch(url);
+      const data = await res.json();
+      const rows = data.values;
       const headers = rows[0];
-      const matched = rows.find(row => row[0] === input); // USER_ID is column 0
+      const records = rows.slice(1);
+      const match = records.find(row => row[0] === userId);
 
-      if (matched) {
-        resultDiv.innerHTML = `
-          <h3>ID Found:</h3>
-          <table border="1">
-            ${headers.map((h, i) => `<tr><td><b>${h}</b></td><td>${matched[i]}</td></tr>`).join("")}
-          </table>
-        `;
+      const resultDiv = document.getElementById('result');
+      if (match) {
+        const info = headers.map((h, i) => `<b>${h}</b>: ${match[i] || ''}`).join("<br>");
+        resultDiv.innerHTML = `<h3>ID Found</h3><p>${info}</p>`;
       } else {
-        resultDiv.innerHTML = `<p style="color:red;">USER_ID not found</p>`;
+        resultDiv.innerHTML = "<p style='color:red;'>USER_ID not found.</p>";
       }
     }
   </script>
