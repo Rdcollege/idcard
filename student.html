@@ -1,113 +1,56 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8" />
-  <title>Student ID Card</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f0f0;
-      padding: 40px;
-      display: flex;
-      justify-content: center;
-    }
-    .id-card {
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #aaa;
-      width: 400px;
-    }
-    .header {
-      text-align: center;
-      font-weight: bold;
-      font-size: 18px;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-    }
-    .photo {
-      display: block;
-      margin: 10px auto;
-      width: 120px;
-      height: 140px;
-      object-fit: cover;
-      border: 2px solid #333;
-    }
-    .info {
-      font-size: 15px;
-      margin: 8px 0;
-    }
-    .label {
-      font-weight: bold;
-    }
-  </style>
-</head>
-<body>
-  <div class="id-card" id="card">
-    <div class="header">Govt. Rani Durgawati College Wadrafnagar<br>Dist Balrampur (C.G.)</div>
-    <img id="photo" class="photo" src="" alt="Student Photo" />
-    <div class="info"><span class="label">Name:</span> <span id="name"></span></div>
-    <div class="info"><span class="label">Father's Name:</span> <span id="fname"></span></div>
-    <div class="info"><span class="label">Mother's Name:</span> <span id="mname"></span></div>
-    <div class="info"><span class="label">DOB:</span> <span id="dob"></span></div>
-    <div class="info"><span class="label">Class:</span> <span id="class"></span></div>
-    <div class="info"><span class="label">Subjects:</span> <span id="subjects"></span></div>
-    <div class="info"><span class="label">Admission No:</span> <span id="admno"></span></div>
-    <div class="info"><span class="label">Admission Date:</span> <span id="admdt"></span></div>
-    <div class="info"><span class="label">Mobile:</span> <span id="mobile"></span></div>
-    <div class="info"><span class="label">Address:</span> <span id="address"></span></div>
-    <div class="info"><span class="label">District:</span> <span id="district"></span></div>
-    <div class="info"><span class="label">Status:</span> <span id="status"></span></div>
-  </div>
+const sheetId = "1Ona1thP9bqtVGF4k7F8VGR5RGUKD9L01p-o68k5ziEk";
+const apiKey = "AIzaSyDFy7OEmx1dj4z2RzPhGA3_b4TNPgcIzEY";
+const sheetName = "Sheet1"; // 🔁 CHANGE THIS IF YOUR SHEET TAB HAS A DIFFERENT NAME
 
-  <script>
-    const sheetId = "1Ona1thP9bqtVGF4k7F8VGR5RGUKD9L01p-o68k5ziEk";
-    const apiKey = "AIzaSyDFy7OEmx1dj4z2RzPhGA3_b4TNPgcIzEY";
+const params = new URLSearchParams(window.location.search);
+const userId = params.get("id");
 
-    const params = new URLSearchParams(window.location.search);
-    const userId = params.get("id");
+if (!userId) {
+  document.getElementById("card").innerHTML = "<p>User ID not provided in URL.</p>";
+} else {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?key=${apiKey}`;
 
-    if (!userId) {
-      document.getElementById("card").innerHTML = "<p>User ID not provided in URL.</p>";
-    } else {
-      fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Sheet1?key=${apiKey}`)
-        .then(res => res.json())
-        .then(data => {
-          const rows = data.values;
-          const headers = rows[0];
-          const userIndex = headers.indexOf("USER_ID");
+  fetch(url)
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP ${res.status} - ${res.statusText}`);
+      return res.json();
+    })
+    .then(data => {
+      if (!data.values || data.values.length < 2) {
+        throw new Error("Sheet returned no usable data");
+      }
 
-          const student = rows.find(row => row[userIndex] === userId);
+      const rows = data.values;
+      const headers = rows[0];
+      const userIndex = headers.indexOf("USER_ID");
 
-          if (!student) {
-            document.getElementById("card").innerHTML = "<p>Student not found.</p>";
-            return;
-          }
+      const student = rows.find(row => row[userIndex] === userId);
 
-          const get = (field) => student[headers.indexOf(field)] || "";
+      if (!student) {
+        document.getElementById("card").innerHTML = "<p>Student not found.</p>";
+        return;
+      }
 
-          document.getElementById("name").textContent = get("NAME");
-          document.getElementById("fname").textContent = get("FNAME");
-          document.getElementById("mname").textContent = get("MNAME");
-          document.getElementById("dob").textContent = get("DOB");
-          document.getElementById("class").textContent = get("CLASS");
-          document.getElementById("subjects").textContent = get("SUBJECTS");
-          document.getElementById("admno").textContent = get("ADMNO");
-          document.getElementById("admdt").textContent = get("ADMDATE");
-          document.getElementById("mobile").textContent = get("MOBILE");
-          document.getElementById("address").textContent = get("ADDRESS");
-          document.getElementById("district").textContent = get("DISTRICT");
-          document.getElementById("status").textContent = get("STATUS");
+      const get = (field) => student[headers.indexOf(field)] || "";
 
-          // Photo from GitHub
-          const photono = get("ADMNO");
-          document.getElementById("photo").src = `https://raw.githubusercontent.com/rdcollege/idcard/main/photos/${photono}.jpg`;
-        })
-        .catch(err => {
-          document.getElementById("card").innerHTML = "<p>Error fetching data.</p>";
-          console.error(err);
-        });
-    }
-  </script>
-</body>
-</html>
+      document.getElementById("name").textContent = get("NAME");
+      document.getElementById("fname").textContent = get("FNAME");
+      document.getElementById("mname").textContent = get("MNAME");
+      document.getElementById("dob").textContent = get("DOB");
+      document.getElementById("class").textContent = get("CLASS");
+      document.getElementById("subjects").textContent = get("SUBJECTS");
+      document.getElementById("admno").textContent = get("ADMNO");
+      document.getElementById("admdt").textContent = get("ADMDATE");
+      document.getElementById("mobile").textContent = get("MOBILE");
+      document.getElementById("address").textContent = get("ADDRESS");
+      document.getElementById("district").textContent = get("DISTRICT");
+      document.getElementById("status").textContent = get("STATUS");
+
+      const photo = get("ADMNO");
+      document.getElementById("photo").src = `https://raw.githubusercontent.com/rdcollege/idcard/main/photos/${photo}.jpg`;
+    })
+    .catch(error => {
+      console.error("Error fetching data:", error);
+      document.getElementById("card").innerHTML = `<p>Error fetching data: ${error.message}</p>`;
+    });
+}
