@@ -75,18 +75,16 @@
       letter-spacing: 0.5px;
     }
 
-   .photo-session-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 10px 0px 0;
-  gap: 10px;
-}
-
-.photo-box {
+  .photo-box {
   flex: 1;
   display: flex;
   justify-content: center;
+  padding: -10px 0px ;
+}
+ .photo-session-wrapper {
+  position: relative;
+  text-align: center;
+  margin-top: 10px;
 }
 
 .photo-box img {
@@ -98,14 +96,16 @@
 }
 
 .session-box {
-  text-align: right;
+  position: absolute;
+  top: 0;
+  right: 16px;
   font-size: 14px;
   font-weight: bold;
   color: #0d47a1;
+  text-align: right;
   line-height: 1.2;
   white-space: nowrap;
 }
-
 
     .details {
       padding: 10px 16px;
