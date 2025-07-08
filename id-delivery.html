@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ID Delivery Update</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f3f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 400px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    button {
+      background: #0d47a1;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 15px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    button:hover {
+      background-color: #1565c0;
+    }
+    #responseMsg {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Mark ID as Delivered</h2>
+    <input type="text" id="userid" placeholder="Enter USER_ID" />
+    <button id="markBtn">✅ Mark as Delivered</button>
+    <div id="responseMsg"></div>
+  </div>
+
+  <script>
+    document.getElementById("markBtn").addEventListener("click", () => {
+      const userId = document.getElementById("userid").value.trim();
+      const msgBox = document.getElementById("responseMsg");
+
+      if (!userId) {
+        msgBox.textContent = "Please enter a USER_ID.";
+        msgBox.style.color = "red";
+        return;
+      }
+
+      fetch("https://script.google.com/macros/s/AKfycby8USeKJvo-xvNqIeC3S3PipWY2OPt3LHERmnEcXuafNFzf3zoH6yF0CYxwVvThB4w/exec", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ USER_ID: userId })
+      })
+      .then(res => res.text())
+      .then(msg => {
+        msgBox.textContent = msg;
+        msgBox.style.color = msg.includes("✅") ? "green" : "red";
+      })
+      .catch(err => {
+        msgBox.textContent = "Error: " + err.message;
+        msgBox.style.color = "red";
+      });
+    });
+  </script>
+</body>
+</html>
