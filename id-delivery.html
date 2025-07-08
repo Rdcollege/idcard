@@ -11,6 +11,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      margin: 0; /* Added to remove default body margin */
     }
     .container {
       background: white;
@@ -19,12 +20,15 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
       text-align: center;
       max-width: 400px;
+      width: 90%; /* Added for better responsiveness */
     }
     input {
-      width: 100%;
+      width: calc(100% - 20px); /* Adjusted for padding */
       padding: 10px;
       font-size: 16px;
       margin-top: 10px;
+      border: 1px solid #ccc; /* Added border for better visibility */
+      border-radius: 4px; /* Added border-radius */
     }
     button {
       background: #0d47a1;
@@ -35,6 +39,7 @@
       font-size: 16px;
       cursor: pointer;
       border-radius: 6px;
+      width: 100%; /* Made button full width */
     }
     button:hover {
       background-color: #1565c0;
@@ -42,6 +47,7 @@
     #responseMsg {
       margin-top: 15px;
       font-weight: bold;
+      min-height: 20px; /* To prevent layout shift */
     }
   </style>
 </head>
@@ -64,21 +70,47 @@
         return;
       }
 
-      fetch("https://script.google.com/macros/s/AKfycbymjjLRXk2scKLWZ1pmb5rjWwDNRXtUqMhCA8gV01Z_UXlRNMqJSc7ieXeDauQNZIQ/exec", {
+      msgBox.textContent = "Processing...";
+      msgBox.style.color = "gray";
+
+      // 🚨 सुनिश्चित करें कि यह आपका सही Google Apps Script वेब ऐप URL है
+      // यह वह URL है जो आपको Google Apps Script डिप्लॉय करने के बाद मिलता है (अंत में /exec के साथ)
+      const scriptUrl = "https://script.google.com/macros/s/AKfycby8USeKJvo-xvNqIeC3S3PipWY2OPt3LHERmnEcXuafNFzf3zoH6yF0CYxwVvThB4w/exec";
+
+      fetch(scriptUrl, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({ USER_ID: userId })
       })
-      .then(res => res.text())
-      .then(msg => {
-        msgBox.textContent = msg;
-        msgBox.style.color = msg.includes("✅") ? "green" : "red";
+      .then(response => {
+        // HTTP स्थिति कोड की जांच करें
+        if (!response.ok) {
+          // यदि प्रतिक्रिया ठीक नहीं है, तो त्रुटि संदेश के लिए JSON पार्स करने का प्रयास करें
+          return response.json().then(errorData => {
+            throw new Error(errorData.message || 'Server error');
+          }).catch(() => {
+            // यदि JSON पार्स नहीं होता है, तो सामान्य त्रुटि संदेश
+            throw new Error('Network response was not ok: ' + response.statusText);
+          });
+        }
+        return response.json(); // प्रतिक्रिया को JSON के रूप में पार्स करें
+      })
+      .then(data => {
+        // JSON प्रतिक्रिया में status प्रॉपर्टी की जांच करें
+        if (data.status === 'success') {
+          msgBox.textContent = data.message;
+          msgBox.style.color = "green";
+        } else {
+          msgBox.textContent = data.message;
+          msgBox.style.color = "red";
+        }
       })
       .catch(err => {
         msgBox.textContent = "Error: " + err.message;
         msgBox.style.color = "red";
+        console.error("Fetch error:", err); // ब्राउज़र कंसोल में भी लॉग करें
       });
     });
   </script>
