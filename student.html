@@ -133,6 +133,16 @@
       width: 56%;
     }
 
+    td.status.green {
+      color: green;
+      font-weight: bold;
+    }
+
+    td.status.red {
+      color: red;
+      font-weight: bold;
+    }
+
     .footer, .credit {
       background: #e3f2fd;
       text-align: center;
@@ -191,8 +201,8 @@
 
           const get = (field) => student[headers.indexOf(field)] || "";
 
-          const status = get("STATUS").trim().toLowerCase();
-          const statusClass = (status === "active") ? "green" : "red";
+          const statusText = get("STATUS").trim().toLowerCase();
+          const statusClass = (statusText === "active") ? "green" : "red";
 
           cardDiv.innerHTML = `
             <div class="id-card">
