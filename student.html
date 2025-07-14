@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,37 +74,37 @@
       letter-spacing: 0.5px;
     }
 
-  .photo-box {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  padding: -10px 0px ;
-}
- .photo-session-wrapper {
-  position: relative;
-  text-align: center;
-  margin-top: 10px;
-}
+    .photo-box {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: -10px 0px;
+    }
+    .photo-session-wrapper {
+      position: relative;
+      text-align: center;
+      margin-top: 10px;
+    }
 
-.photo-box img {
-  width: 95px;
-  height: 110px;
-  border: 2px solid #0d47a1;
-  border-radius: 8px;
-  object-fit: cover;
-}
+    .photo-box img {
+      width: 95px;
+      height: 110px;
+      border: 2px solid #0d47a1;
+      border-radius: 8px;
+      object-fit: cover;
+    }
 
-.session-box {
-  position: absolute;
-  top: 0;
-  right: 16px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #0d47a1;
-  text-align: right;
-  line-height: 1.2;
-  white-space: nowrap;
-}
+    .session-box {
+      position: absolute;
+      top: 0;
+      right: 16px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #0d47a1;
+      text-align: right;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
 
     .details {
       padding: 10px 16px;
@@ -132,16 +131,6 @@
 
     td.value {
       width: 56%;
-    }
-
-    td.status.green {
-      color: green;
-      font-weight: bold;
-    }
-
-    td.status.red {
-      color: red;
-      font-weight: bold;
     }
 
     .footer, .credit {
@@ -189,7 +178,7 @@
         .then(data => {
           const rows = data.values;
           const headers = rows[0];
-          const userIndex = headers.indexOf("USER_ID");
+          const userIndex = headers.indexOf("USERID");
 
           const student = rows.find(row => row[userIndex] === userId);
 
@@ -205,8 +194,6 @@
           const status = get("STATUS").trim().toLowerCase();
           const statusClass = (status === "active") ? "green" : "red";
 
-          const photo = get("PHOTO");
-
           cardDiv.innerHTML = `
             <div class="id-card">
               <div class="header">
@@ -214,18 +201,14 @@
                 <h2>Govt. Rani Durgawati College<br>Wadrafnagar, Dist. Balrampur (C.G.)</h2>
               </div>
               <div class="title-bar">STUDENT ID CARD</div>
-              
-              
-              
-             <div class="photo-session-wrapper">
-  <div class="photo-box">
-    <img src="https://raw.githubusercontent.com/rdcollege/idcard/main/photo/${get("PHOTO")}" alt="Student Photo" />
-  </div>
-  <div class="session-box">
-    Session<br>2025-26
-  </div>
-</div>
-
+              <div class="photo-session-wrapper">
+                <div class="photo-box">
+                  <img src="https://raw.githubusercontent.com/rdcollege/idcard/main/photo/${get("PHOTO")}" alt="Student Photo" />
+                </div>
+                <div class="session-box">
+                  Session<br>2025-26
+                </div>
+              </div>
               <div class="details">
                 <table>
                   <tr><td class="label">Name</td><td class="colon">:</td><td class="value">${get("NAME")}</td></tr>
@@ -233,13 +216,15 @@
                   <tr><td class="label">Mother's Name</td><td class="colon">:</td><td class="value">${get("MNAME")}</td></tr>
                   <tr><td class="label">DOB</td><td class="colon">:</td><td class="value">${get("DOB")}</td></tr>
                   <tr><td class="label">Class</td><td class="colon">:</td><td class="value">${get("CLASS")}</td></tr>
-                  <tr><td class="label">Subject</td><td class="colon">:</td><td class="value">${get("SUBJECTS")}</td></tr>
+                  <tr><td class="label">Subject</td><td class="colon">:</td><td class="value">${get("SUBJECT")}</td></tr>
                   <tr><td class="label">Admission No.</td><td class="colon">:</td><td class="value">${get("ADMNO")}</td></tr>
                   <tr><td class="label">Admission Date</td><td class="colon">:</td><td class="value">${get("ADMDATE")}</td></tr>
                   <tr><td class="label">Blood Group</td><td class="colon">:</td><td class="value">${get("BG")}</td></tr>
+                  <tr><td class="label">Aadhar No.</td><td class="colon">:</td><td class="value">${get("ADDAR")}</td></tr>
                   <tr><td class="label">Address</td><td class="colon">:</td><td class="value">${get("ADDRESS")}</td></tr>
-                  <tr><td class="label">District</td><td class="colon">:</td><td class="value">${get("DISTRICT")}</td></tr>
-                  <tr><td class="label">Mobile No.</td><td class="colon">:</td><td class="value">${get("MOBILE")}</td></tr>
+                  <tr><td class="label">District</td><td class="colon">:</td><td class="value">${get("DIST")}</td></tr>
+                  <tr><td class="label">Mobile No.</td><td class="colon">:</td><td class="value">${get("MO")}</td></tr>
+                  <tr><td class="label">ABC ID</td><td class="colon">:</td><td class="value">${get("ABCID")}</td></tr>
                   <tr><td class="label">Status</td><td class="colon">:</td><td class="value status ${statusClass}">${get("STATUS")}</td></tr>
                 </table>
               </div>
