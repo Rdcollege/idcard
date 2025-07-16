@@ -14,8 +14,7 @@
       min-height: 100vh;
     }
 
-    
-        #card {
+    #card {
       width: 100%;
       max-width: 400px;
     }
@@ -81,6 +80,7 @@
       justify-content: center;
       padding: -10px 0px;
     }
+
     .photo-session-wrapper {
       position: relative;
       text-align: center;
@@ -159,6 +159,22 @@
       color: #555;
       background: #f1f1f1;
     }
+
+    .qr {
+      text-align: center;
+      margin: 12px 0;
+    }
+
+    .qr img {
+      width: 90px;
+      height: 90px;
+    }
+
+    .qr p {
+      font-size: 12px;
+      color: #333;
+      margin-top: 4px;
+    }
   </style>
 </head>
 <body>
@@ -176,7 +192,7 @@
 
     if (!userId) {
       cardDiv.innerHTML = `<div style="text-align:center; padding: 40px; font-size: 18px; color: red;">
-        ❌ USER_ID not provided in URL.
+        ❌ USERID not provided in URL.
       </div>`;
     } else {
       const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?key=${apiKey}`;
@@ -204,6 +220,7 @@
 
           const statusText = get("STATUS").trim().toLowerCase();
           const statusClass = (statusText === "active") ? "green" : "red";
+          const qrUrl = `https://rdcollege.github.io/idcard/student.html?id=${get("USERID")}`;
 
           cardDiv.innerHTML = `
             <div class="id-card">
@@ -216,9 +233,7 @@
                 <div class="photo-box">
                   <img src="https://raw.githubusercontent.com/rdcollege/idcard/main/photo/${get("PHOTO")}" alt="Student Photo" />
                 </div>
-                <div class="session-box">
-                  Session<br>2025-26
-                </div>
+                <div class="session-box">Session<br>2025-26</div>
               </div>
               <div class="details">
                 <table>
@@ -232,7 +247,6 @@
                   <tr><td class="label">Admission Date</td><td class="colon">:</td><td class="value">${get("ADMDATE")}</td></tr>
                   <tr><td class="label">Blood Group</td><td class="colon">:</td><td class="value">${get("BG")}</td></tr>
                   <tr><td class="label">Aadhar No.</td><td class="colon">:</td><td class="value">${get("ADDAR")}</td></tr>
-                 
                   <tr><td class="label">Address</td><td class="colon">:</td><td class="value">${get("ADDRESS")}</td></tr>
                   <tr><td class="label">District</td><td class="colon">:</td><td class="value">${get("DIST")}</td></tr>
                   <tr><td class="label">Mobile No.</td><td class="colon">:</td><td class="value">${get("MO")}</td></tr>
@@ -241,12 +255,12 @@
                   <tr><td class="label">Status</td><td class="colon">:</td><td class="value status ${statusClass}">${get("STATUS")}</td></tr>
                 </table>
               </div>
-              <div style="text-align:center; padding: 12px;">
-  <img src="https://chart.googleapis.com/chart?cht=qr&chs=120x120&chl=https://rdcollege.github.io/idcard/student.html?id=${get("USERID")}" alt="QR Code" />
-  <div style="font-size: 12px; color: #555;">Scan to verify</div>
-</div>
+              <div class="qr">
+                <img src="https://chart.googleapis.com/chart?cht=qr&chs=120x120&chl=${encodeURIComponent(qrUrl)}" alt="QR Code">
+                <p>Scan to verify</p>
+              </div>
               <div class="footer">Verified by: Govt. Rani Durgawati College</div>
-              
+              <div class="credit">Designed & Printed by: Nilesh Computer & IT Solution, Wadrafnagar | Mo. 8085070290</div>
             </div>
           `;
         })
